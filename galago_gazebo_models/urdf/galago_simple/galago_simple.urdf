@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<robot name="galago_simple">
+	<static>false</static>
+	<link name='chassis'>
+		<pose>0.0 0.0 0.5 0.0 0.0 0.0</pose>
+		
+		<collision name='collision'>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_simple/galago_simple.dae</uri>
+				</mesh>
+			</geometry>
+		</collision>
+		
+		<visual name='visual'>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_simple/galago_simple.dae</uri>
+				</mesh>
+			</geometry>
+		</visual>
+	</link>
+</robot>

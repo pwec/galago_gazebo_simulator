@@ -1,0 +1,331 @@
+<?xml version="1.0"?>
+
+	<!-- a test of spring, see reference from ODE discussion
+      http://www.ode.org/old_list_archives/2006-March/018014.html
+      where stiffness and damping are related to joint limit cfm and erp
+      public static void Calc(float springConstant, float dampingCofficient, float
+      sprungMass, out float erp, out float cfm)
+      {
+                  float r = 2.0f * dampingCofficient * (float)Math.Sqrt(sprungMass
+      * springConstant);
+                  float hk = Scene.OdeTimeStep * springConstant;
+
+                  erp = hk / (hk + r);
+                  cfm = 1.0f / (hk + r);
+      }
+      in the end,
+      erp = dt * kp / ( dt * kp + kd )
+      cfm = 1 / ( dt * kp + kd )
+    -->
+	
+<robot name="galago_springs">
+	<static>false</static>
+	<link name='chassis'>
+		<pose>0.0 0.0 0.5 0.0 0.0 0.0</pose>
+		<gravity>true</gravity>
+		<self_collide>false</self_collide>
+		<kinematic>false</kinematic>
+		<velocity_decay>
+			<linear>0.0</linear>
+			<angular>0.0</angular>
+		</velocity_decay>
+		<inertial>
+			<pose>0.0 0.0 0.5 0.0 0.0 0.0</pose>
+			<inertia>
+				<ixx>0.01</ixx>
+				<ixy>0.0</ixy>
+				<ixz>0.0</ixz>
+				<iyy>0.01</iyy>
+				<iyz>0.0</iyz>
+				<izz>0.01</izz>
+			</inertia>
+			<mass>1.0</mass>
+		</inertial>
+		<collision name='chassis_collision'>
+			<max_contacts>250</max_contacts>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_springs/galago_simple_base.dae</uri>
+				</mesh>
+			</geometry>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</collision>
+		<visual name='chassis_visual'>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_springs/galago_simple_base.dae</uri>
+				</mesh>
+			</geometry>
+		</visual>
+	</link>
+	
+	<link name='spring_a'>
+		<pose>0.0 0.0 0.5 0.0 0.0 0.0</pose>
+		<gravity>true</gravity>
+		<self_collide>false</self_collide>
+		<kinematic>false</kinematic>
+		<velocity_decay>
+			<linear>0.0</linear>
+			<angular>0.0</angular>
+		</velocity_decay>
+		<inertial>
+			<pose>0.0 0.0 0.5 0.0 0.0 0.0</pose>
+			<inertia>
+				<ixx>0.01</ixx>
+				<ixy>0.0</ixy>
+				<ixz>0.0</ixz>
+				<iyy>0.01</iyy>
+				<iyz>0.0</iyz>
+				<izz>0.01</izz>
+			</inertia>
+			<mass>1.0</mass>
+		</inertial>
+		<collision name='spring_a_collision'>
+			<max_contacts>250</max_contacts>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_springs/galago_simple_spring.dae</uri>
+				</mesh>
+			</geometry>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</collision>
+		<visual name='spring_a_visual'>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_springs/galago_simple_spring.dae</uri>
+				</mesh>
+			</geometry>
+		</visual>
+		
+	</link>
+	
+	<link name='spring_b'>
+		<pose>0.0 0.0 0.5 0.0 0.0 2.094333333</pose>
+		<gravity>true</gravity>
+		<self_collide>false</self_collide>
+		<kinematic>false</kinematic>
+		<velocity_decay>
+			<linear>0.0</linear>
+			<angular>0.0</angular>
+		</velocity_decay>
+		<inertial>
+			<pose>0.0 0.0 0.5 0.0 0.0 0.0</pose>
+			<inertia>
+				<ixx>0.01</ixx>
+				<ixy>0.0</ixy>
+				<ixz>0.0</ixz>
+				<iyy>0.01</iyy>
+				<iyz>0.0</iyz>
+				<izz>0.01</izz>
+			</inertia>
+			<mass>1.0</mass>
+		</inertial>
+		<collision name='spring_b_collision'>
+			<max_contacts>250</max_contacts>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_springs/galago_simple_spring.dae</uri>
+				</mesh>
+			</geometry>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</collision>
+		<visual name='spring_b_visual'>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_springs/galago_simple_spring.dae</uri>
+				</mesh>
+			</geometry>
+		</visual>
+	</link>
+	
+	<link name='spring_c'>
+		<pose>0.0 0.0 0.5 0.0 0.0 -2.094333333</pose>
+		<gravity>true</gravity>
+		<self_collide>false</self_collide>
+		<kinematic>false</kinematic>
+		<velocity_decay>
+			<linear>0.0</linear>
+			<angular>0.0</angular>
+		</velocity_decay>
+		<inertial>
+			<pose>0.0 0.0 0.5 0.0 0.0 0.0</pose>
+			<inertia>
+				<ixx>0.01</ixx>
+				<ixy>0.0</ixy>
+				<ixz>0.0</ixz>
+				<iyy>0.01</iyy>
+				<iyz>0.0</iyz>
+				<izz>0.01</izz>
+			</inertia>
+			<mass>1.0</mass>
+		</inertial>
+		<collision name='spring_c_collision'>
+			<max_contacts>250</max_contacts>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_springs/galago_simple_spring.dae</uri>
+				</mesh>
+			</geometry>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</collision>
+		<visual name='spring_c_visual'>
+			<geometry>
+				<mesh>
+					<uri>package://galago_gazebo_models/meshes/galago_springs/galago_simple_spring.dae</uri>
+				</mesh>
+			</geometry>
+		</visual>
+	</link>
+	
+	<joint name="spring_a_joint" type="prismatic">
+		<pose>1.0 0.0 0.0 0.0 0.0 0.0</pose>
+		<child>spring_a</child>
+		<parent>chassis</parent>
+		<axis>
+			<limit>
+				<lower>0</lower>
+				<upper>0</upper>
+			</limit>
+			<xyz>0.0 0.0 1.0</xyz>
+		</axis>
+		<physics>
+			<ode>
+				<limit>
+					<cfm>0.1</cfm>
+					<erp>0.1</erp>
+				</limit>
+			</ode>
+		</physics>
+	</joint>
+	
+	<joint name="spring_b_joint" type="prismatic">
+		<pose>1.0 0.0 0.0 0.0 0.0 2.094333333</pose>
+		<child>spring_b</child>
+		<parent>chassis</parent>
+		<axis>
+			<limit>
+				<lower>0</lower>
+				<upper>0</upper>
+			</limit>
+			<xyz>0.0 0.0 1.0</xyz>
+		</axis>
+		<physics>
+			<ode>
+				<limit>
+					<cfm>0.0</cfm>
+					<erp>0.2</erp>
+				</limit>
+			</ode>
+		</physics>
+	</joint>
+	
+	<joint name="spring_c_joint" type="prismatic">
+		<pose>1.0 0.0 0.0 0.0 0.0 -2.094333333</pose>
+		<child>spring_c</child>
+		<parent>chassis</parent>
+		<axis>
+			<limit>
+				<lower>0</lower>
+				<upper>0</upper>
+			</limit>
+			<xyz>0.0 0.0 1.0</xyz>
+		</axis>
+		<physics>
+			<ode>
+				<limit>
+					<cfm>1</cfm>
+					<erp>0.1</erp>
+				</limit>
+			</ode>
+		</physics>
+	</joint>
+	<!--physics>
+	<ode>
+	  <implicit_spring_damper>true</implicit_spring_damper>
+	  <cfm>0.1</cfm>
+	  <erp>0.1</erp>
+	</ode>
+      </physics>
+    </joint>
+    <plugin name="spring_test" filename="libSpringTestPlugin.so">
+      <joint_explicit>joint_0</joint_explicit>
+      <kp_explicit>111.1111</kp_explicit>
+      <kd_explicit>0</kd_explicit>
+      <joint_implicit>joint_1</joint_implicit>
+      <kp_implicit>111.1111</kp_implicit>
+      <kd_implicit>0</kd_implicit>
+      <k>111</k>
+    </plugin-->
+</robot>

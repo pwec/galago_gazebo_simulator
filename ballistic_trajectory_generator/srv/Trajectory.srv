@@ -1,0 +1,4 @@
+geometry_msgs/Pose begin
+geometry_msgs/Pose end
+---
+geometry_msgs/PoseArray trajectory
