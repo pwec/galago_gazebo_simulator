@@ -1,23 +1,372 @@
 <?xml version='1.0'?>
 <robot name="galago_simple">
-	<static>false</static>
-	<link name='chassis'>
-		<pose>0.0 0.0 0.5 0.0 0.0 0.0</pose>
-		
-		<collision name='collision'>
+	
+	<link name='body'>
+		<inertial>
+			<origin xyz="0 0 0.5" rpy="0 0 0"/>
+			<mass value="10.0"/>
+			<inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1" />
+		</inertial>
+		<collision name='body_collision'>
+			<origin xyz="0 0 0.5" rpy="0 0 0"/>
 			<geometry>
-				<mesh>
-					<uri>package://galago_gazebo_models/meshes/galago_simple/galago_simple.dae</uri>
-				</mesh>
+				<mesh filename="package://galago_gazebo_models/meshes/galago_simple/galago_simple.dae"/>
 			</geometry>
 		</collision>
-		
-		<visual name='visual'>
+		<visual name='body_visual'>
+			<origin xyz="0 0 0.5" rpy="0 0 0"/>
 			<geometry>
-				<mesh>
-					<uri>package://galago_gazebo_models/meshes/galago_simple/galago_simple.dae</uri>
-				</mesh>
+				<mesh filename="package://galago_gazebo_models/meshes/galago_simple/galago_simple.dae"/>
 			</geometry>
+			<material name="orange"/>
+		</visual>
+		<gazebo>
+			<static>false</static>
+			<gravity>true</gravity>
+			<self_collide>false</self_collide>
+			<kinematic>false</kinematic>
+			<velocity_decay>
+				
+				<linear>0.0</linear>
+				<angular>0.0</angular>
+			</velocity_decay>
+			<max_contacts>250</max_contacts>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</gazebo>
+	</link>
+	
+	
+	<link name="cam_a_link">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+			<material name="orange">
+				<color rgba="0.8 0.2 0.2 1.0"/>
+			</material>
 		</visual>
 	</link>
+	
+	<joint name="cam_a_joint" type="fixed">
+		<origin rpy="0 0 3.1416" xyz="-0.5 0 0.5"/>
+		<parent link="body"/>
+		<child link="cam_a_link"/>
+		<!--limit effort="30" velocity="1.0" lower="-2.2" upper="0.7" /-->
+	</joint>
+	
+	<gazebo reference="cam_a_link">
+		<sensor type="camera" name="camera_camera_sensor">
+			<update_rate>30.0</update_rate>
+			<camera>
+				<pose>0 0 0 0 0 0</pose>
+				<horizontal_fov>1.047</horizontal_fov>
+				<image>
+					<format>R8G8B8</format>
+					<width>1024</width>
+					<height>1024</height>
+				</image>
+				<clip>
+					<near>0.01</near>
+					<far>100</far>
+				</clip>
+			</camera>
+			
+			<plugin name="camera_camera_controller" filename="libgazebo_ros_camera.so">
+				<alwaysOn>true</alwaysOn>
+				<updateRate>30.0</updateRate>
+				<cameraName>body_sensor/cam_a</cameraName>
+				<imageTopicName>image_raw</imageTopicName>
+				<cameraInfoTopicName>camera_info</cameraInfoTopicName>
+				<frameName>cam_a</frameName>
+				<robotNamespace>galago_simple</robotNamespace>
+				<hackBaseline>0.07</hackBaseline>
+				<distortionK1>0.0</distortionK1>
+				<distortionK2>0.0</distortionK2>
+				<distortionK3>0.0</distortionK3>
+				<distortionT1>0.0</distortionT1>
+				<distortionT2>0.0</distortionT2>
+			</plugin>
+		</sensor>
+	</gazebo>
+	
+	<link name="cam_b_link">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+			<material name="orange">
+				<color rgba="0.8 0.2 0.2 1.0"/>
+			</material>
+		</visual>
+	</link>
+	
+	<joint name="cam_b_joint" type="fixed">
+		<origin rpy="0 0 -1.0472" xyz="0.25 -0.433 0.5"/>
+		<parent link="body"/>
+		<child link="cam_b_link"/>
+		<!--limit effort="30" velocity="1.0" lower="-2.2" upper="0.7" /-->
+	</joint>
+	
+	<gazebo reference="cam_b_link">
+		<sensor type="camera" name="camera_camera_sensor">
+			<update_rate>30.0</update_rate>
+			<camera>
+				<pose>0 0 0 0 0 0</pose>
+				<horizontal_fov>1.047</horizontal_fov>
+				<image>
+					<format>R8G8B8</format>
+					<width>1024</width>
+					<height>1024</height>
+				</image>
+				<clip>
+					<near>0.01</near>
+					<far>100</far>
+				</clip>
+			</camera>
+			
+			<plugin name="camera_camera_controller" filename="libgazebo_ros_camera.so">
+				<alwaysOn>true</alwaysOn>
+				<updateRate>30.0</updateRate>
+				<cameraName>body_sensor/cam_b</cameraName>
+				<imageTopicName>image_raw</imageTopicName>
+				<cameraInfoTopicName>camera_info</cameraInfoTopicName>
+				<frameName>cam_b</frameName>
+				<robotNamespace>galago_simple</robotNamespace>
+				<hackBaseline>0.07</hackBaseline>
+				<distortionK1>0.0</distortionK1>
+				<distortionK2>0.0</distortionK2>
+				<distortionK3>0.0</distortionK3>
+				<distortionT1>0.0</distortionT1>
+				<distortionT2>0.0</distortionT2>
+			</plugin>
+		</sensor>
+	</gazebo>
+	
+	<link name="cam_c_link">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+			<material name="orange">
+				<color rgba="0.8 0.2 0.2 1.0"/>
+			</material>
+		</visual>
+	</link>
+	
+	<joint name="cam_c_joint" type="fixed">
+		<origin rpy="0 0 1.0472" xyz="0.25 0.433 0.5"/>
+		<parent link="body"/>
+		<child link="cam_c_link"/>
+		<!--limit effort="30" velocity="1.0" lower="-2.2" upper="0.7" /-->
+	</joint>
+	
+	<gazebo reference="cam_c_link">
+		<sensor type="camera" name="camera_camera_sensor">
+			<update_rate>30.0</update_rate>
+			<camera>
+				<pose>0 0 0 0 0 0</pose>
+				<horizontal_fov>1.047</horizontal_fov>
+				<image>
+					<format>R8G8B8</format>
+					<width>1024</width>
+					<height>1024</height>
+				</image>
+				<clip>
+					<near>0.01</near>
+					<far>100</far>
+				</clip>
+			</camera>
+			
+			<plugin name="camera_camera_controller" filename="libgazebo_ros_camera.so">
+				<alwaysOn>true</alwaysOn>
+				<updateRate>30.0</updateRate>
+				<cameraName>body_sensor/cam_c</cameraName>
+				<imageTopicName>image_raw</imageTopicName>
+				<cameraInfoTopicName>camera_info</cameraInfoTopicName>
+				<frameName>cam_c</frameName>
+				<robotNamespace>galago_simple</robotNamespace>
+				<hackBaseline>0.07</hackBaseline>
+				<distortionK1>0.0</distortionK1>
+				<distortionK2>0.0</distortionK2>
+				<distortionK3>0.0</distortionK3>
+				<distortionT1>0.0</distortionT1>
+				<distortionT2>0.0</distortionT2>
+			</plugin>
+		</sensor>
+	</gazebo>
+	
+	<link name="cam_down_link">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+			<material name="orange">
+				<color rgba="0.8 0.2 0.2 1.0"/>
+			</material>
+		</visual>
+	</link>
+	
+	<joint name="cam_down_joint" type="fixed">
+		<origin rpy="0 1.57 0" xyz="0.0 0.0 0.5"/>
+		<parent link="body"/>
+		<child link="cam_down_link"/>
+		<!--limit effort="30" velocity="1.0" lower="-2.2" upper="0.7" /-->
+	</joint>
+	
+	<gazebo reference="cam_down_link">
+		<sensor type="camera" name="camera_camera_sensor">
+			<update_rate>30.0</update_rate>
+			<camera>
+				<pose>0 0 0 0 0 0</pose>
+				<horizontal_fov>1.047</horizontal_fov>
+				<image>
+					<format>R8G8B8</format>
+					<width>1024</width>
+					<height>1024</height>
+				</image>
+				<clip>
+					<near>0.01</near>
+					<far>100</far>
+				</clip>
+			</camera>
+			
+			<plugin name="camera_camera_controller" filename="libgazebo_ros_camera.so">
+				<alwaysOn>true</alwaysOn>
+				<updateRate>30.0</updateRate>
+				<cameraName>body_sensor/cam_down</cameraName>
+				<imageTopicName>image_raw</imageTopicName>
+				<cameraInfoTopicName>camera_info</cameraInfoTopicName>
+				<robotNamespace>galago_simple</robotNamespace>
+				<frameName>cam_down</frameName>
+				<hackBaseline>0.07</hackBaseline>
+				<distortionK1>0.0</distortionK1>
+				<distortionK2>0.0</distortionK2>
+				<distortionK3>0.0</distortionK3>
+				<distortionT1>0.0</distortionT1>
+				<distortionT2>0.0</distortionT2>
+			</plugin>
+		</sensor>
+	</gazebo>
+	
+	<link name="cam_up_link">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+			<material name="orange">
+				<color rgba="0.8 0.2 0.2 1.0"/>
+			</material>
+		</visual>
+	</link>
+	
+	<joint name="cam_up_joint" type="fixed">
+		<origin rpy="0 -1.57 0" xyz="0.0 0.0 0.5"/>
+		<parent link="body"/>
+		<child link="cam_up_link"/>
+		<!--limit effort="30" velocity="1.0" lower="-2.2" upper="0.7" /-->
+	</joint>
+	
+	<gazebo reference="cam_up_link">
+		<sensor type="camera" name="camera_camera_sensor">
+			<update_rate>30.0</update_rate>
+			<camera>
+				<pose>0 0 0 0 0 0</pose>
+				<horizontal_fov>1.047</horizontal_fov>
+				<image>
+					<format>R8G8B8</format>
+					<width>1024</width>
+					<height>1024</height>
+				</image>
+				<clip>
+					<near>0.01</near>
+					<far>100</far>
+				</clip>
+			</camera>
+			
+			<plugin name="camera_camera_controller" filename="libgazebo_ros_camera.so">
+				<alwaysOn>true</alwaysOn>
+				<updateRate>30.0</updateRate>
+				<cameraName>body_sensor/cam_up</cameraName>
+				<imageTopicName>image_raw</imageTopicName>
+				<cameraInfoTopicName>camera_info</cameraInfoTopicName>
+				<robotNamespace>galago_simple</robotNamespace>
+				<frameName>cam_up</frameName>
+				<hackBaseline>0.07</hackBaseline>
+				<distortionK1>0.0</distortionK1>
+				<distortionK2>0.0</distortionK2>
+				<distortionK3>0.0</distortionK3>
+				<distortionT1>0.0</distortionT1>
+				<distortionT2>0.0</distortionT2>
+			</plugin>
+		</sensor>
+	</gazebo>
+	
+	
+	<gazebo>
+		<plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+			<alwaysOn>true</alwaysOn>
+			<bodyName>body</bodyName>
+			<topicName>imu_data</topicName>
+			<serviceName>imu_service</serviceName>
+			<gaussianNoise>0.0</gaussianNoise>
+			<updateRate>30.0</updateRate>
+			<xyzOffset>0 0 0</xyzOffset>
+			<rpyOffset>0 0 0</rpyOffset>
+			<frameName>world</frameName>
+		</plugin>
+	</gazebo>
+	
+	
+	<gazebo>
+		<plugin name="gazebo_ros_force" filename="libgazebo_ros_force.so">
+			<alwaysOn>true</alwaysOn>
+			<update>100</update>
+			<updateRate>30.0</updateRate>
+			<bodyName>body</bodyName>
+			<topicName>force</topicName>
+		</plugin>
+	</gazebo>
+	
+	<!-- stereo cam -->
+	<!--gazebo reference="left_camera_frame"> <sensor type="multicamera" name="stereo_camera"> <update_rate>30.0</update_rate> <camera name="left"> <horizontal_fov>1.3962634</horizontal_fov> <image> <width>800</width> <height>800</height> <format>R8G8B8</format> </image> <clip> <near>0.02</near> <far>300</far> </clip> <noise> <type>gaussian</type> <mean>0.0</mean> <stddev>0.007</stddev> </noise> </camera> <camera name="right"> <pose>0 -0.07 0 0 0 0</pose> <horizontal_fov>1.3962634</horizontal_fov> <image> <width>800</width> <height>800</height> <format>R8G8B8</format> </image> <clip> <near>0.02</near> <far>300</far> </clip> <noise> <type>gaussian</type> <mean>0.0</mean> <stddev>0.007</stddev> </noise> </camera> <plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so"> <alwaysOn>true</alwaysOn> <updateRate>0.0</updateRate> <cameraName>multisense_sl/camera</cameraName> <imageTopicName>image_raw</imageTopicName> <cameraInfoTopicName>camera_info</cameraInfoTopicName> <frameName>left_camera_optical_frame</frameName>
+		<<rightFrameName>right_camera_optical_frame</rightFrameName>> <hackBaseline>0.07</hackBaseline> <distortionK1>0.0</distortionK1> <distortionK2>0.0</distortionK2> <distortionK3>0.0</distortionK3> <distortionT1>0.0</distortionT1> <distortionT2>0.0</distortionT2> </plugin> </sensor> </gazebo-->
+	
+	<!-- depth cam - kinect -->
+	<!--gazebo> <plugin name="${link_name}_controller" filename="libgazebo_ros_openni_kinect.so"> <baseline>0.2</baseline> <alwaysOn>true</alwaysOn> <updateRate>1.0</updateRate> <cameraName>${camera_name}_ir</cameraName> <imageTopicName>/${camera_name}/depth/image_raw</imageTopicName> <cameraInfoTopicName>/${camera_name}/depth/camera_info</cameraInfoTopicName> <depthImageTopicName>/${camera_name}/depth/image_raw</depthImageTopicName> <depthImageInfoTopicName>/${camera_name}/depth/camera_info</depthImageInfoTopicName> <pointCloudTopicName>/${camera_name}/depth/points</pointCloudTopicName> <frameName>${frame_name}</frameName> <pointCloudCutoff>0.5</pointCloudCutoff> <distortionK1>0.00000001</distortionK1> <distortionK2>0.00000001</distortionK2> <distortionK3>0.00000001</distortionK3> <distortionT1>0.00000001</distortionT1> <distortionT2>0.00000001</distortionT2> <CxPrime>0</CxPrime> <Cx>0</Cx> <Cy>0</Cy> <focalLength>0</focalLength> <hackBaseline>0</hackBaseline> </plugin> </gazebo-->
+	
+	<!-- laser - hokuyo -->
+	<!--gazebo reference="hokuyo_link"> <sensor type="gpu_ray" name="head_hokuyo_sensor"> <pose>0 0 0 0 0 0</pose> <visualize>false</visualize> <update_rate>40</update_rate> <ray> <scan> <horizontal> <samples>720</samples> <resolution>1</resolution> <min_angle>-1.570796</min_angle> <max_angle>1.570796</max_angle> </horizontal> </scan> <range> <min>0.10</min> <max>30.0</max> <resolution>0.01</resolution> </range> <noise> <type>gaussian</type> <... Noise parameters based on published spec for Hokuyo laser achieving "+-30mm" accuracy at range < 10m. A mean of 0.0m and stddev of 0.01m will put 99.7% of samples within 0.03m of the true reading. ...> <mean>0.0</mean> <stddev>0.01</stddev> </noise> </ray> <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_gpu_laser.so"> <topicName>/rrbot/laser/scan</topicName> <frameName>hokuyo_link</frameName> </plugin> </sensor> </gazebo-->
+	
+	<!--ground truth-->
+	<!--bumper for contacts-->
+	
+	<!--planar move?-->
+	<!--Force-->
+	<!--joint pose trajectory-->
+	
+	<!--projector/video-->
+	
 </robot>

@@ -282,7 +282,7 @@
 		<axis xyz="0 0 1"/>
 		<limit lower="0" upper="0" effort="1000" velocity="10"/>
 		<dynamics dumping="0.5" friction="0.0"/>
-	</joint >
+	</joint>
 	
 	<!--gazebo reference="spring_a_joint">
 		<implicitSpringDamper>true</implicitSpringDamper>
@@ -297,7 +297,7 @@
 		<axis xyz="0 0 1"/>
 		<limit lower="0" upper="0" effort="1000" velocity="10"/>
 		<dynamics dumping="0.5" friction="0.0"/>
-	</joint >
+	</joint>
 	
 	<!--gazebo reference="spring_b_joint">
 		<implicitSpringDamper>true</implicitSpringDamper>
@@ -312,7 +312,7 @@
 		<axis xyz="0 0 1"/>
 		<limit lower="0" upper="0" effort="1000" velocity="10"/>
 		<dynamics dumping="0.5" friction="0.0"/>
-	</joint >
+	</joint>
 	
 	<!---gazebo reference="spring_c_joint">
 		<implicitSpringDamper>true</implicitSpringDamper>

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.4">
-	<world name="flat_asteroid">
+	<world name="moon_gale">
 		<scene>
 			<ambient>0.5 0.5 0.5 1</ambient>
 			<!--background>0.0 0.0 0.0 1</background-->
@@ -21,9 +21,9 @@
 		<include>
 			<uri>model://gale_surface</uri>
 		</include>
-		<!--physics type="ode">
-			<gravity>0.0 0.0 -9.81</gravity>
-			<ode>
+		<physics type="ode">
+			<gravity>0.0 0.0 -1.622</gravity>
+			<!--ode>
 				<solver>
 					<type>quick</type>
 					<iters>1000</iters>
@@ -37,7 +37,7 @@
 				</constraints>
 			</ode>
 			<real_time_update_rate>0</real_time_update_rate>
-			<max_step_size>0.001</max_step_size>
-		</physics-->
+			<max_step_size>0.001</max_step_size-->
+		</physics>
 	</world>
 </sdf>
