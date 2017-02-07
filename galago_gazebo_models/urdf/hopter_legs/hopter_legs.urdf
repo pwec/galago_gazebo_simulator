@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+	<!-- a test of leg, see reference from ODE discussion
+      http://www.ode.org/old_list_archives/2006-March/018014.html
+      where stiffness and damping are related to joint limit cfm and erp
+      public static void Calc(float legConstant, float dampingCofficient, float
+      sprungMass, out float erp, out float cfm)
+      {
+                  float r = 2.0f * dampingCofficient * (float)Math.Sqrt(sprungMass
+      * legConstant);
+                  float hk = Scene.OdeTimeStep * legConstant;
+
+                  erp = hk / (hk + r);
+                  cfm = 1.0f / (hk + r);
+      }
+      in the end,
+      erp = dt * kp / ( dt * kp + kd )
+      cfm = 1 / ( dt * kp + kd )
+    -->
+
+<robot name="galago_legs">
+	<link name='disk'>
+		<inertial>
+			<origin xyz="0 0 0" rpy="0 0 1.57"/>
+			<mass value="7.0"/>
+			<inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1" />
+		</inertial>
+		<collision name='disk_collision'>
+			<origin xyz="0 0 0" rpy="0 0 1.57"/>
+			<geometry>
+				<mesh filename="package://galago_gazebo_models/meshes/hopter/disk.dae" scale="0.01 0.01 0.01"/>
+			</geometry>
+		</collision>
+		<visual name='disk_visual'>
+			<origin xyz="0 0 0" rpy="0 0 1.57"/>
+			<geometry>
+				<mesh filename="package://galago_gazebo_models/meshes/hopter/disk.dae" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="orange"/>
+		</visual>
+		<gazebo>
+			<static>false</static>
+			<gravity>true</gravity>
+			<self_collide>false</self_collide>
+			<kinematic>false</kinematic>
+			<velocity_decay>
+				<linear>0.0</linear>
+				<angular>0.0</angular>
+			</velocity_decay>
+			<max_contacts>250</max_contacts>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</gazebo>
+	</link>
+	
+	<link name='leg_a'>
+		<inertial>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<mass value="1.0"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+		</inertial>
+		<collision name='leg_a_collision'>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://galago_gazebo_models/meshes/hopter/leg_support.dae" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<surface>
+				<bounce restitution_coefficient="1.0" threshold="0.01"/>
+			</surface>
+		</collision>
+		<visual name='leg_a_visual'>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://galago_gazebo_models/meshes/hopter/leg_support.dae" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="orange"/>
+		</visual>
+		<!--gazebo>
+			<static>false</static>
+			<gravity>true</gravity>
+			<self_collide>false</self_collide>
+			<kinematic>false</kinematic>
+			<velocity_decay>
+				<linear>0.0</linear>
+				<angular>0.0</angular>
+			</velocity_decay>
+			<max_contacts>250</max_contacts>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</gazebo-->
+	</link>
+	
+	<gazebo reference="leg_a">
+		<mu1 value="100.0" />
+		<mu2 value="0.1" />
+		<!-- kp value="10000000.0" / -->
+		<maxVel value="10.0"/>
+		<kp value="100000000.0" />
+		<kd value="1.0" />
+		<fdir1 value="1 0 0" />
+		<material>Gazebo/Grey</material>
+		<turnGravityOff>false</turnGravityOff>
+	</gazebo>
+	
+	<joint name="leg_a_joint" type="revolute">
+		<parent link="disk"/>
+		<child link="leg_a"/>
+		<origin xyz="-0.095 0 0" rpy="0 1.57 1.57"/>
+		<axis xyz="0 0 1"/>
+		<limit lower="0" upper="0" effort="1000" velocity="10"/>
+		<dynamics dumping="0.5" friction="0.0"/>
+	</joint>
+	
+	<link name='leg_b'>
+		<inertial>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<mass value="1.0"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+		</inertial>
+		<collision name='leg_b_collision'>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://galago_gazebo_models/meshes/hopter/leg_support.dae" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<surface>
+				<bounce restitution_coefficient="1.0" threshold="0.01"/>
+			</surface>
+		</collision>
+		<visual name='leg_b_visual'>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://galago_gazebo_models/meshes/hopter/leg_support.dae" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="orange"/>
+		</visual>
+		<!--gazebo>
+			<static>false</static>
+			<gravity>true</gravity>
+			<self_collide>false</self_collide>
+			<kinematic>false</kinematic>
+			<velocity_decay>
+				<linear>0.0</linear>
+				<angular>0.0</angular>
+			</velocity_decay>
+			<max_contacts>250</max_contacts>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</gazebo-->
+	</link>
+	
+	<gazebo reference="leg_b">
+		<mu1 value="100.0" />
+		<mu2 value="0.1" />
+		<!-- kp value="10000000.0" / -->
+		<maxVel value="10.0"/>
+		<kp value="100000000.0" />
+		<kd value="1.0" />
+		<fdir1 value="1 0 0" />
+		<material>Gazebo/Grey</material>
+		<turnGravityOff>false</turnGravityOff>
+	</gazebo>
+	
+	<joint name="leg_b_joint" type="revolute">
+		<parent link="disk"/>
+		<child link="leg_b"/>
+		<origin xyz="0.05 0.09 0" rpy="0 1.57 -0.52"/>
+		<axis xyz="0 0 1"/>
+		<limit lower="0" upper="0" effort="1000" velocity="10"/>
+		<dynamics dumping="0.5" friction="0.0"/>
+	</joint>
+
+	<link name='leg_c'>
+		<inertial>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<mass value="1.0"/>
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+		</inertial>
+		<collision name='leg_c_collision'>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://galago_gazebo_models/meshes/hopter/leg_support.dae" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<surface>
+				<bounce restitution_coefficient="1.0" threshold="0.01"/>
+			</surface>
+		</collision>
+		<visual name='leg_c_visual'>
+			<origin xyz="0 0.11 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://galago_gazebo_models/meshes/hopter/leg_support.dae" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="orange"/>
+		</visual>
+		<!--gazebo>
+			<static>false</static>
+			<gravity>true</gravity>
+			<self_collide>false</self_collide>
+			<kinematic>false</kinematic>
+			<velocity_decay>
+				<linear>0.0</linear>
+				<angular>0.0</angular>
+			</velocity_decay>
+			<max_contacts>250</max_contacts>
+			<surface>
+				<friction>
+					<ode>
+						<mu>0.2</mu>
+						<mu2>0.2</mu2>
+						<fdir1>1.0 0 0</fdir1>
+						<slip1>0</slip1>
+						<slip2>0</slip2>
+					</ode>
+				</friction>
+				<contact>
+					<ode>
+						<kp>111.1111</kp>
+						<kd>0.0</kd>
+						<max_vel>10000.0</max_vel>
+						<min_depth>0.0</min_depth>
+					</ode>
+				</contact>
+			</surface>
+		</gazebo-->
+	</link>
+	
+	<gazebo reference="leg_c">
+		<mu1 value="100.0" />
+		<mu2 value="0.1" />
+		<!-- kp value="10000000.0" / -->
+		<maxVel value="10.0"/>
+		<kp value="100000000.0" />
+		<kd value="1.0" />
+		<fdir1 value="1 0 0" />
+		<material>Gazebo/Grey</material>
+		<turnGravityOff>false</turnGravityOff>
+	</gazebo>
+	
+	<joint name="leg_c_joint" type="revolute">
+		<parent link="disk"/>
+		<child link="leg_c"/>
+		<origin xyz="0.05 -0.09 0" rpy="0 1.57 -2.6176"/>
+		<axis xyz="0 0 1"/>
+		<limit lower="0" upper="0" effort="1000" velocity="10"/>
+		<dynamics dumping="0.5" friction="0.0"/>
+	</joint>
+
+</robot>

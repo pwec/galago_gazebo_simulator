@@ -19,10 +19,7 @@
 		<arg name="verbose" value="$(arg verbose)"/>
 	</include>
 	
-	<param name="robot_description" textfile="$(find galago_gazebo_models)/urdf/galago_simple/galago_simple.urdf" />
-	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model galago_simple -z 10.0" />
-	
-	<!-- Spawn a robot into Gazebo -->
-	<!--node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-file $(find galago_gazebo_models)/urdf/galago_springs/galago_springs.urdf -urdf -model galago_springs" output="screen" /-->
+	<param name="robot_description" textfile="$(find galago_gazebo_models)/urdf/hopter_legs/hopter_legs.urdf" />
+	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model hopter_legs -z 10.0" output="screen" />
 	
 </launch>

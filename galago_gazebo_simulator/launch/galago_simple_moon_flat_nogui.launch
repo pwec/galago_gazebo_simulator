@@ -3,14 +3,14 @@
 	<!-- these are the arguments you can pass this launch file, for example paused:=true -->
 	<arg name="paused" default="false"/>
 	<arg name="use_sim_time" default="true"/>
-	<arg name="gui" default="true"/>
+	<arg name="gui" default="false"/>
 	<arg name="headless" default="false"/>
 	<arg name="debug" default="false"/>
 	<arg name="verbose" default="true"/>
 	
 	<!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<arg name="world_name" value="$(find galago_gazebo_simulator)/worlds/simple_moon_gale.world"/>
+		<arg name="world_name" value="$(find galago_gazebo_simulator)/worlds/simple_moon_flat.world"/>
 		<arg name="debug" value="$(arg debug)" />
 		<arg name="gui" value="$(arg gui)" />
 		<arg name="paused" value="$(arg paused)"/>
@@ -20,9 +20,6 @@
 	</include>
 	
 	<param name="robot_description" textfile="$(find galago_gazebo_models)/urdf/galago_simple/galago_simple.urdf" />
-	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model galago_simple -z 10.0" />
-	
-	<!-- Spawn a robot into Gazebo -->
-	<!--node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-file $(find galago_gazebo_models)/urdf/galago_springs/galago_springs.urdf -urdf -model galago_springs" output="screen" /-->
+	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model galago_simple -z 1.0" output="screen" />
 	
 </launch>
